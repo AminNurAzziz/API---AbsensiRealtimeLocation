@@ -57,6 +57,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Route
 const userRoute = require('./routes/userRoute');
 const absenRoute = require('./routes/absenRoute');

@@ -2,6 +2,7 @@ const Absen = require('../models/Absen');
 const moment = require('moment-timezone');
 
 
+
 class AbsenController {
     static async listAllAbsen(req, res) {
         try {
@@ -13,7 +14,7 @@ class AbsenController {
                     status: absen.status,
                     keterangan: absen.keterangan,
                     timestamp: moment(absen.timestamp).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
-                    images: absen.images,
+                    images: absen.Image,
                     lat: absen.lat,
                     long: absen.long,
                 };
@@ -33,10 +34,8 @@ class AbsenController {
     }
     static async createAbsen(req, res) {
         try {
-            const { idPegawai, status, images, lat, long } = req.body;
-            console.log(req.body);
+            const { idPegawai, status,lat, long } = req.body;
             const timestamp = moment().tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
-            console.log(timestamp);
             // Define the expected maximum time for each status
             const expectedMaxTime = {
                 'Masuk': '07:00:00',
@@ -54,7 +53,11 @@ class AbsenController {
     
             // Jika terlambat, ubah status menjadi "Terlambat"
             const newKeterangan = isLate ? 'Terlambat' : 'Disiplin';
-            const newAbsen = new Absen({ idPegawai, status, keterangan: newKeterangan, timestamp, images, lat, long });
+            const newAbsen = new Absen({ idPegawai, status, keterangan: newKeterangan, timestamp, lat, long });
+            console.log(req.file);
+            if (req.file) {
+                newAbsen.Image = req.file.filename;
+            }
             console.log(newAbsen);
             const savedAbsen = await newAbsen.save();
     
