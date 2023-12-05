@@ -26,3 +26,6 @@ const userSchema = new Schema({
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email', usernameUnique: false });
 
 module.exports = mongoose.model('User', userSchema);
+
+// Koordinator, magang ndek app di duplikasi buat absen anak casual, ndek kerjoan ada anak casual
+
